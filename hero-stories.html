@@ -205,6 +205,105 @@
 </head>
 <body>
   <h2>HERO STORIES</h2>
+  <div class="carousel-wrapper">
+    <button id="prevBtn" class="nav-btn">&#8249;</button>
+    <div class="carousel-container">
+      <div class="card" id="cardHoverArea">
+        <img id="image2" src="https://static.wixstatic.com/media/e25337_1e38bfa52e994ec3b37c63661fd37040~mv2.png" />
+        <div class="card-content">
+          <h3 id="title2">The Golden Dawn</h3>
+          <p id="desc2">In the twilight of an ancient kingdom, a warrior emerged from the ashes of defeat...</p>
+          <button class="btn" id="btn1">Show More</button>
+        </div>
+      </div>
+    </div>
+    <button class="nav-btn" id="nextBtn">&#8250;</button>
+  </div>
+  <script>
+    let products = [{
+      src: "https://static.wixstatic.com/media/e25337_1e38bfa52e994ec3b37c63661fd37040~mv2.png",
+      title: "The Golden Dawn",
+      description: "In the twilight of an ancient kingdom, a warrior emerged from the ashes of defeat...",
+      urunSayfa: "https://yourshopierlink.com"
+    }];
+    let currentIndex = 0;
+    let autoSwitchInterval = null;
+    let switchDelay = 5000;
+    let isPaused = false;
+
+    function showProduct(index) {
+      const product = products[index];
+      const imageElement = document.getElementById("image2");
+      const titleElement = document.getElementById("title2");
+      const descElement = document.getElementById("desc2");
+
+      imageElement.classList.add("slide-out-left");
+      titleElement.classList.add("slide-out-left");
+      descElement.classList.add("slide-out-left");
+
+      setTimeout(() => {
+        imageElement.src = product.src;
+        titleElement.innerText = product.title;
+        descElement.innerText = product.description;
+
+        imageElement.classList.remove("slide-out-left");
+        titleElement.classList.remove("slide-out-left");
+        descElement.classList.remove("slide-out-left");
+
+        imageElement.classList.add("slide-in-right");
+        titleElement.classList.add("slide-in-right");
+        descElement.classList.add("slide-in-right");
+
+        setTimeout(() => {
+          imageElement.classList.remove("slide-in-right");
+          titleElement.classList.remove("slide-in-right");
+          descElement.classList.remove("slide-in-right");
+        }, 400);
+      }, 300);
+    }
+
+    function startAutoSwitch() {
+      clearInterval(autoSwitchInterval);
+      autoSwitchInterval = setInterval(() => {
+        if (!isPaused) {
+          currentIndex = (currentIndex + 1) % products.length;
+          showProduct(currentIndex);
+        }
+      }, switchDelay);
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + products.length) % products.length;
+      showProduct(currentIndex);
+      startAutoSwitch();
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % products.length;
+      showProduct(currentIndex);
+      startAutoSwitch();
+    });
+
+    document.getElementById("btn1").addEventListener("click", () => {
+      const currentProduct = products[currentIndex];
+      if (currentProduct.urunSayfa) {
+        window.open(currentProduct.urunSayfa, "_blank");
+      }
+    });
+
+    document.getElementById("cardHoverArea").addEventListener("mouseenter", () => {
+      isPaused = true;
+    });
+
+    document.getElementById("cardHoverArea").addEventListener("mouseleave", () => {
+      isPaused = false;
+    });
+
+    window.onload = () => {
+      showProduct(currentIndex);
+      startAutoSwitch();
+    };
+  </script>
   
 </body>
 </html>
